@@ -1,18 +1,18 @@
 from app.IFRS.Impairment.Calculation.models 	import *
-from app.IFRS.Impairment.Group.models 			import MKT_IMP_GROUP
-from sqlalchemy.sql     	 					import func
-from sqlalchemy 								import case
-from collections 								import defaultdict
-import numpy 										as np
-from datetime 									import date
-from app.LoanContract.models 					import MKT_LOAN_CONTRACT
-from copy 										import deepcopy
-from app.IFRS.tools.mktsetting 					import getIfrsSetting, getAuditrial
-import app.tools.mktaccounting 						as mktaccounting
-import app.tools.mktsetting 						as mktsetting
-from app 										import db
+from app.IFRS.Impairment.Group.models 				import MKT_IMP_GROUP
+from sqlalchemy.sql     	 										import func
+from sqlalchemy 															import case
+from collections 															import defaultdict
+import numpy 																	as np
+from datetime 																import date
+from app.LoanContract.models 									import MKT_LOAN_CONTRACT
+from copy 																		import deepcopy
+from app.IFRS.tools.mktsetting 								import getIfrsSetting, getAuditrial
+import app.tools.mktaccounting 								as mktaccounting
+import app.tools.mktsetting 									as mktsetting
+from app 																			import db
 import random
-import app.tools.mktpdcollection 						as mktpdcollection
+import app.tools.mktpdcollection 							as mktpdcollection
 # from app.IFRS.tools.mktimpdatacollection 		import getAuditrial
 
 
@@ -22,18 +22,18 @@ def getAgingSetting():
 
 
 def getPDByNumDay(NumDayDue):
- 	"""
-		This function will return:
-		 	PD1 : Period 1
-		 	PD2 : Period 2 .....
- 	"""
+	"""
+	This function will return:
+	 	PD1 : Period 1
+	 	PD2 : Period 2 .....
+	"""
 
-  PARPeriod = getAgingSetting()
+	PARPeriod = getAgingSetting()
 
-  if NumDayDue == 0 : return "CurrentPD"
+	if NumDayDue == 0 : return "CurrentPD"
 
-  for Index, Value in enumerate(PARPeriod) :
-    Value = Value.replace("<=", "1>").replace(">=", "")
+	for Index, Value in enumerate(PARPeriod) :
+		Value = Value.replace("<=", "1>").replace(">=", "")
 		Aging = Value.split(">")
 
 		if len(Aging) == 2 :
@@ -48,9 +48,9 @@ def getPDByNumDay(NumDayDue):
 def getAgingByNumDay(NumDayDue):
 	"""
 		This function will return:
-		 	Aging1DueAmt 	: Aging1 Due Amount
-		 	Aging2DueAmt 	: Aging2 Due Amount .....
- 	"""
+			Aging1DueAmt 	: Aging1 Due Amount
+			Aging2DueAmt 	: Aging2 Due Amount .....
+	"""
 
 	PARPeriod = getAgingSetting()
 
@@ -133,7 +133,7 @@ class ImpairmentCalculator(object):
 
 	def getTLPByGroup(self):
 		"""
-			TLP = Total Loan Protfolio
+			TLP = Total Loan Portfolio
 			Data to be return sample:
 			------------------------------------------------------------------------
 			{'1': [
@@ -243,7 +243,7 @@ class ImpairmentCalculator(object):
 				"NumDayDue": int(mktpdcollection.getNumDayDue(str(Row[1])))
 				})
 
-			print "#######################", Row
+			print("#######################", Row)
 
 		return RiskPortfolioList
 
@@ -981,15 +981,15 @@ def insertImpairmentData(GeneratingID="", Branch="", ImpairmentGroup=[]) :
 			GroupImpAmt)
 
 		ImpLoan = ImpCalculator.getImpairedAmtByLoan()
-		print "++++++", ImpLoan
+		print("++++++", ImpLoan)
 		insertImpByLoan(GeneratingID, ImpLoan)
 
-		print "#"*120, GeneratingID, ImpairmentGroup, Branch, ImpLoan
+		print("#"*120, GeneratingID, ImpairmentGroup, Branch, ImpLoan)
 
 		db.session.commit()
 
 	except Exception as e :
-		print e
+		print(e)
 
 		db.session.rollback()
 
