@@ -13,7 +13,6 @@ import app.tools.mktsetting 									as mktsetting
 from app 																			import db
 import random
 import app.tools.mktpdcollection 							as mktpdcollection
-# from app.IFRS.tools.mktimpdatacollection 		import getAuditrial
 
 
 def getAgingSetting():
